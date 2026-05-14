@@ -1,5 +1,7 @@
 # Issue relating werf
 
+Local repo used.
+
 Steps to reproduce:
 1. `werf build --dev`
 2. Call `werf build --dev` again - layers cached properly (v)
