@@ -1,0 +1,20 @@
+project: www-backend
+configVersion: 1
+image: base
+from: harbor.core.movavi.com/proxy_cache/library/php:8.5.5-cli-alpine3.23
+shell:
+  beforeInstall:
+    - mkdir -p /home/www-data/.composer
+    - chown -R www-data:www-data /home/www-data/.composer
+    - apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS
+    - apk add --no-cache --virtual .run-deps libpq-dev icu-dev icu-data-full shadow gomplate
+    - apk add --no-cache --virtual .cve-fix-deps 'nghttp2-libs>=1.68.1'
+    - docker-php-ext-configure intl
+    - docker-php-ext-install intl sysvsem pdo_pgsql sockets pcntl
+    - pecl install redis-6.3.0 protobuf-4.33.6 brotli-0.18.3
+    - docker-php-ext-enable redis protobuf brotli
+    - apk del .build-deps
+    - rm -rf /tmp/* /var/cache/apk/*
+    - rm -rfv /var/www/html
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=2.9.5
+    - test -f /usr/local/bin/composer
