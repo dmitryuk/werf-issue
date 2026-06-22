@@ -1,5 +1,5 @@
 image: base
-from: harbor.core.movavi.com/proxy_cache/library/php:8.5.5-cli-alpine3.23
+from: php:8.5.5-cli-alpine3.23
 shell:
   beforeInstall:
   - apk add --no-cache --virtual .build-deps linux-headers $PHPIZE_DEPS
